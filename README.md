@@ -4,7 +4,7 @@
 
 ## Description
 
-Pug Asset Loader (pug-asset-loader) is a Webpack loader designed to process Pug templates and output Pug files where assets, such as images, have been automatically processed by Webpack.  It makes available a `pal()` pseudo-function in your Pug templates to which you pass a file path.
+Pug Asset Loader (pug-asset-loader) is a Webpack loader designed to process Pug templates and output Pug files where assets, such as images, have been automatically processed by Webpack.  It makes available a `pal()` pseudo-function in your Pug templates to which you pass a file path.  You may give the pseudo-function a different custom name if you wish using one of the loader options.
 
 An example use case is to automatically load only the images your template actually uses, and automatically copy them to your dist folder in the appropriate location as defined by file-loader. pug-asset-loader also supports integration with url-loader and will automatically replace `pal()` calls with data URLs if url-loader is in use and returns a data URL.
 
@@ -28,7 +28,9 @@ You may pass pug-asset-loader an options object with the following properties:
 
 - `root: String`:  Resource root of your dependent files.  For example, if in your Pug you have `img(src="pal(images/image.jpg)")` and that path is `/src/images/image.jpg` relative to the root of your project, then you should set this option to `./src` (so relative to the location of `webpack.config.js`).  Trailing slash will be added automatically if not present.
 
-If you do not set this option, the resource root will be assumed to be a sub-directory of the location of whatever Pug file is presently being processed.  Unless you have a very peculiar (and probably inefficient) organization of your project, this is virtually guaranteed to cause you problems, so it's advised you ensure to explicitly set a resource root.
+  - If you do not set this option, the resource root will be assumed to be a sub-directory of the location of whatever Pug file is presently being processed.  Unless you have a very peculiar (and probably inefficient) organization of your project, this is virtually guaranteed to cause you problems, so it's advised you ensure to explicitly set a resource root.
+
+- `funcName: String`:  Custom name for the pseudo-function.  `pal()` by default.  Do not include the parentheses with this.  So for example, if you want the function to be `load()`, set this option to just "load"
 
 - `outputPath: String`:  Custom path with which to replace the `pal()` calls. Does not affect where the loaded files are output.  Trailing slash will be added automatically if not present.  If unspecified, path will not be changed.
 

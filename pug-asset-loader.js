@@ -66,8 +66,14 @@ module.exports = function pugAssetLoader(content) {
     }
   }
 
+  let funcName = 'pal';
+
+  if(options && options.hasOwnProperty('funcName')) {
+    funcName = options.funcName;
+  }
+
   //Set up regex to search for pal() calls
-  const palRE = new RegExp(/pal\(/, 'gi');
+  const palRE = new RegExp(funcName + '\\(', 'gi');
 
   //verifyRE will be used to ensure the
   //rest of the pal() statement follows
@@ -103,7 +109,8 @@ module.exports = function pugAssetLoader(content) {
       continue;
     }
 
-    //If pal() call is escaped, remove the
+    //If pal() (or other custom function name)
+    //call is escaped, remove the
     //backslash, then continue.
     if(content[regexResult.index-1] === '\\') {
       content = content.slice(0, regexResult.index-1) + content.slice(regexResult.index, content.length);
@@ -135,13 +142,13 @@ module.exports = function pugAssetLoader(content) {
     //Just path withotu file name.
     let inFilePath = path.dirname(inputPath) + path.sep;
 
-    //palStart holds the index of the letter
-    //"p" in pal(), so that we can remove
-    //the pal() call and replace it
+    //palStart holds the index of the first
+    //letter in funcName, so that we can remove
+    //the function call and replace it
     //with the file path.
-    let palStart = content.indexOf('pal', regexResult.index);
+    let palStart = content.indexOf(funcName, regexResult.index);
 
-    //palStmt is the pal() statement in
+    //palStmt is the pal()/funcName statement in
     //full. This will be used with replace()
     //to replace the pal() call with a
     //file path in the output file.
